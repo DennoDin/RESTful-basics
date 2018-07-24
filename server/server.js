@@ -9,7 +9,7 @@ const morgan = require("morgan"); // logger middleware
 /** *Other Dependencies** */
 const apiRouter = require("./resources/api.router");
 app.use(
-  "/api/", // add additional middleware to the server, mounted on the /api/ path
+  "/api", // add additional middleware to the server, mounted on the /api/ path
   express.json(), // enables parsing of application/json request bodies
   express.urlencoded({ extended: true }), // enables parsing of application/x-www-form-urlencoded data
   apiRouter

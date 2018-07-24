@@ -7,13 +7,18 @@ const app = require("../server/server.js");
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const chalk = require("chalk");
+chai.should();
 
-app.listen(PORT, () =>
-  console.log(
-    // sets server to listen to PORT and outputs to the CL
-    chalk.yellow.bold("Test server listening on port: ") + chalk.cyan.bold(PORT)
-  )
-);
+let server;
+before(() => {
+  server = app.listen(PORT, () =>
+    console.log(
+      // sets server to listen to PORT and outputs to the CL
+      chalk.yellow.bold("Test server listening on port: ") +
+        chalk.cyan.bold(PORT)
+    )
+  );
+});
 
 chai.use(chaiHttp);
 
@@ -44,7 +49,7 @@ describe("GET /api", () => {
   });
 });
 
-xdescribe("GET /api/quotes", () => {
+describe("GET /api/quotes", () => {
   let status;
   let response;
   let responseQuotes;
@@ -61,25 +66,25 @@ xdescribe("GET /api/quotes", () => {
       });
   });
 
-  xit("should return status 200.", (done) => {
+  it("should return status 200.", (done) => {
     status.should.equal(200);
     done();
   });
 
-  xit("should be a JSON object.", (done) => {
+  it("should be a JSON object.", (done) => {
     response.should.be.a("string");
     response = JSON.parse(response);
     response.should.be.an("object");
     done();
   });
 
-  xit('should have a "quotes" property containing an array.', (done) => {
+  it('should have a "quotes" property containing an array.', (done) => {
     response.should.have.a.property("quotes").that.is.an("array");
     responseQuotes = response.quotes;
     done();
   });
 
-  xit('should contain only quotes with both "text" and an "author".', (done) => {
+  it('should contain only quotes with both "text" and an "author".', (done) => {
     for (const quote of responseQuotes) {
       quote.should.be.an("object");
       quote.should.have.a.property("text");
@@ -90,7 +95,7 @@ xdescribe("GET /api/quotes", () => {
     done();
   });
 
-  xit("should allow an author parameter.", (done) => {
+  it("should allow an author parameter.", (done) => {
     chai
       .request(app)
       .get("/api/quotes?author=''")
@@ -287,3 +292,5 @@ describe("POST/PUT Tests", () => {
     xit("should clear the file if passed an empty request body");
   });
 });
+
+after(() => server.close());

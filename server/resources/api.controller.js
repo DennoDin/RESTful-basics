@@ -1,4 +1,5 @@
 const { read, send } = require("./helpers");
+const fs = require("fs");
 
 const OK = 200;
 const FAIL = 400;
@@ -15,5 +16,10 @@ module.exports = {
       false
     );
   },
-  // your code here!
+  quote(req, res) {
+    send(res, OK, read());
+  },
+  quoteAuthor(req, res) {
+    send(res, OK, read());
+  },
 };

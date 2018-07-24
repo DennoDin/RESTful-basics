@@ -7,7 +7,20 @@ const TYPE = "utf8";
 const cache = null;
 
 const read = () => {
-  // read the quotes text file into memory
+  const text = fs.readFileSync(QUOTES, TYPE);
+  const obj = {
+    quotes: [],
+  };
+  const splitted = text.toString().split("\n");
+  for (let i = 0; i < splitted.length; i++) {
+    const splitLine = splitted[i].split(" ~");
+    const objects = {
+      text: splitLine[0],
+      author: splitLine[1],
+    };
+    obj.quotes.push(objects);
+  }
+  return obj;
 };
 
 const send = (res, code, data, json = true) => {
