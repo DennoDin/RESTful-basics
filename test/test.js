@@ -292,7 +292,7 @@ describe("POST/PUT Tests", () => {
       done();
     });
 
-    xit("should overwrite the existing quote file.", (done) => {
+    it("should overwrite the existing quote file.", (done) => {
       chai
         .request(app)
         .get("/api/quotes")
@@ -303,7 +303,7 @@ describe("POST/PUT Tests", () => {
         });
     });
 
-    xit('should return status 400 if "text" is empty.', (done) => {
+    it('should return status 400 if "text" is empty.', (done) => {
       chai
         .request(app)
         .put("/api/quotes")

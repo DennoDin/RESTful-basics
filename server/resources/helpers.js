@@ -55,7 +55,12 @@ const append = async (text, author) => {
 
 const update = async (object) => {
   const newQuotesArr = [];
-  console.log(object);
+  for (let i = 0; i < object.length; i++) {
+    newQuotesArr.push(`${object[i].text} ~${object[i].author}`);
+  }
+  const input = newQuotesArr.join("\n");
+  await fs.writeFile("./server/data/quotes.txt", input, "utf8");
+  cache = await fs.readFile(QUOTES, TYPE);
   // for (let i = 0; i < quotesArr.length; i++) {
   //   const quoteWithAuthor = `${quotesArr[i].text} ~${quotesArr[i].author}`;
   //   newQuotesArr.push(quoteWithAuthor);
@@ -69,7 +74,6 @@ const update = async (object) => {
   // const newQuoteWithAuthor = `${req.body.text} ~${author}`;
   // newQuotesArr.push(newQuoteWithAuthor);
   // const output = newQuotesArr.join("\n");
-  // await fs.writeFile("./server/data/quotes.txt", output, "utf8");
 };
 
-module.exports = { read, send, append };
+module.exports = { read, send, append, update };

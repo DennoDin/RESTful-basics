@@ -1,4 +1,4 @@
-const { read, send, append } = require("./helpers");
+const { read, send, append, update } = require("./helpers");
 const fs = require("fs").promises;
 
 const OK = 200;
@@ -38,6 +38,8 @@ module.exports = {
       send(res, FAIL);
       return;
     }
+    const object = req.body;
+    await update(object);
     send(res, OK);
   },
 };
