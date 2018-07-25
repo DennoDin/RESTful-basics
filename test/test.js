@@ -234,7 +234,32 @@ describe("POST/PUT Tests", () => {
     });
 
     it('should fill in blank or missing authors with "Anonymous".', (done) => {
-      // Your code here!
+      const anonData = {
+        text: "Feel free to add your own quote!",
+        author: "Anonymous",
+      };
+      const anonOriginalData = {
+        text: "Feel free to add your own quote!",
+        author: "",
+      };
+
+      chai
+        .request(app)
+        .post("/api/quotes")
+        .set("Content-Type", "application/json")
+        .send(anonOriginalData)
+        .end(() => {
+          chai
+            .request(app)
+            .get("/api/quotes")
+            .set("Content-Type", "application/json")
+            .end((error, result) => {
+              JSON.parse(result.text)
+                .quotes.pop()
+                .should.deep.equal(anonData);
+              done();
+            });
+        });
     });
   });
 
@@ -258,7 +283,7 @@ describe("POST/PUT Tests", () => {
       done();
     });
 
-    xit("should overwrite the existing quote file.", (done) => {
+    it("should overwrite the existing quote file.", (done) => {
       chai
         .request(app)
         .get("/api/quotes")
@@ -269,7 +294,7 @@ describe("POST/PUT Tests", () => {
         });
     });
 
-    xit('should return status 400 if "text" is empty.', (done) => {
+    it('should return status 400 if "text" is empty.', (done) => {
       chai
         .request(app)
         .put("/api/quotes")
@@ -285,11 +310,11 @@ describe("POST/PUT Tests", () => {
         });
     });
 
-    xit('should fill in blank or missing authors with "Anonymous".', (done) => {
+    it('should fill in blank or missing authors with "Anonymous".', (done) => {
       // Your code here!
     });
 
-    xit("should clear the file if passed an empty request body");
+    it("should clear the file if passed an empty request body");
   });
 });
 
