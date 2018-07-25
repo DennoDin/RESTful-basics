@@ -265,10 +265,12 @@ describe("POST/PUT Tests", () => {
   describe("PUT /api/quotes", () => {
     let status;
 
-    const anon = {
-      text: "Wubba lubba dub dub!",
-      author: "Anonymous",
-    };
+    const anon = [
+      {
+        text: "Wubba lubba dub dub!",
+        author: "Anonymous",
+      },
+    ];
 
     const noName = [
       {
@@ -326,20 +328,23 @@ describe("POST/PUT Tests", () => {
         .request(app)
         .put("/api/quotes")
         .set("Content-Type", "application/json")
-        .send([
-          {
-            text: "Wubba lubba dub dub!",
-            author: "",
-          },
-        ])
+        .send(noName)
         .end((_, res) => {
           JSON.parse(res.text).quotes.should.deep.equal(anon);
           done();
         });
     });
 
-    xit("should clear the file if passed an empty request body.", (done) => {
-      done();
+    it("should clear the file if passed an empty request body.", (done) => {
+      chai
+        .request(app)
+        .put("/api/quotes")
+        .set("Content-Type", "application/json")
+        .send([{}])
+        .end((_, res) => {
+          res.text.length.should.equal(0);
+          done();
+        });
     });
   });
 });

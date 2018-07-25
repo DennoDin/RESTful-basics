@@ -1,9 +1,7 @@
 const { read, send, append, update } = require("./helpers");
-const fs = require("fs").promises;
 
 const OK = 200;
 const FAIL = 400;
-const SERVER_ERROR = 500;
 
 /** *Controllers** */
 
@@ -34,12 +32,17 @@ module.exports = {
     send(res, OK);
   },
   async editQuotes(req, res) {
+    if (req.body.length === 0) {
+      await update();
+      send(res, OK, await read());
+      return;
+    }
     if (!req.body[0].text) {
       send(res, FAIL);
       return;
     }
     const object = req.body;
     await update(object);
-    send(res, OK);
+    send(res, OK, await read());
   },
 };
