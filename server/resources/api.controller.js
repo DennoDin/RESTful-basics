@@ -1,5 +1,5 @@
-const { read, send } = require("./helpers");
-const fs = require("fs");
+const { read, send, append } = require("./helpers");
+const fs = require("fs").promises;
 
 const OK = 200;
 const FAIL = 400;
@@ -16,36 +16,28 @@ module.exports = {
       false
     );
   },
-  quote(req, res) {
+  async quote(req, res) {
     const author = req.query.author;
-    send(res, OK, read(author));
+    send(res, OK, await read(author));
   },
-  quoteRandom(req, res) {
-    send(res, OK, read("random"));
+  async quoteRandom(req, res) {
+    send(res, OK, await read("random"));
   },
-  addQuote(req, res) {
+  async postQuote(req, res) {
     if (req.body.text === "") {
       send(res, FAIL);
       return;
     }
-    const quotesObj = read();
-    const quotesArr = quotesObj.quotes;
-    const newQuotesArr = [];
-    for (let i = 0; i < quotesArr.length; i++) {
-      const quoteWithAuthor = `${quotesArr[i].text} ~${quotesArr[i].author}`;
-      newQuotesArr.push(quoteWithAuthor);
+    const text = req.body.text;
+    const author = req.body.author;
+    await append(text, author);
+    send(res, OK);
+  },
+  async editQuotes(req, res) {
+    if (!req.body[0].text) {
+      send(res, FAIL);
+      return;
     }
-    let author;
-    if (!req.body.author) {
-      author = "Anonymous";
-    } else {
-      author = req.body.author;
-    }
-    const newQuoteWithAuthor = `${req.body.text} ~${author}`;
-    newQuotesArr.push(newQuoteWithAuthor);
-    const output = newQuotesArr.join("\n");
-    fs.writeFileSync("./server/data/quotes.txt", output, "utf8");
-
     send(res, OK);
   },
 };

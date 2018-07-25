@@ -1,17 +1,19 @@
 // Reminder that all of this is just suggestion, feel free to do things your way!
-const fs = require("fs");
+const fs = require("fs").promises;
 
 const QUOTES = "./server/data/quotes.txt";
 const TYPE = "utf8";
 
-const cache = null;
+let cache = null;
 
-const read = (req) => {
-  const text = fs.readFileSync(QUOTES, TYPE);
+const read = async (author) => {
+  if (!cache) {
+    cache = await fs.readFile(QUOTES, TYPE);
+  }
   const obj = {
     quotes: [],
   };
-  const splitted = text.toString().split("\n");
+  const splitted = cache.toString().split("\n");
   for (let i = 0; i < splitted.length; i++) {
     const splitLine = splitted[i].split(" ~");
     const objects = {
@@ -20,14 +22,14 @@ const read = (req) => {
     };
     obj.quotes.push(objects);
   }
-  if (req === "random") {
+  if (author === "random") {
     const number = Math.floor(Math.random() * obj.quotes.length);
     const randomQuote = obj.quotes[number];
     return randomQuote;
   }
-  if (req) {
+  if (author) {
     return obj.quotes.filter((element) => {
-      return element.author === req;
+      return element.author === author;
     });
   }
   return obj;
@@ -42,8 +44,32 @@ const send = (res, code, data, json = true) => {
   }
 };
 
-// const record = (quote, author) {
+const append = async (text, author) => {
+  if (!author) {
+    author = "Anonymous";
+  }
+  const output = `\n${text} ~${author}`;
+  await fs.appendFile("./server/data/quotes.txt", output, "utf8");
+  cache = await fs.readFile(QUOTES, TYPE);
+};
 
-// }
+const update = async (object) => {
+  const newQuotesArr = [];
+  console.log(object);
+  // for (let i = 0; i < quotesArr.length; i++) {
+  //   const quoteWithAuthor = `${quotesArr[i].text} ~${quotesArr[i].author}`;
+  //   newQuotesArr.push(quoteWithAuthor);
+  // }
+  // let author;
+  // if (!req.body.author) {
+  //   author = "Anonymous";
+  // } else {
+  //   author = req.body.author;
+  // }
+  // const newQuoteWithAuthor = `${req.body.text} ~${author}`;
+  // newQuotesArr.push(newQuoteWithAuthor);
+  // const output = newQuotesArr.join("\n");
+  // await fs.writeFile("./server/data/quotes.txt", output, "utf8");
+};
 
-module.exports = { read, send };
+module.exports = { read, send, append };

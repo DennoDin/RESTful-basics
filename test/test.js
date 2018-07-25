@@ -198,6 +198,14 @@ describe("POST/PUT Tests", () => {
       text: "Wubba lubba dub dub!",
       author: "Rick Sanchez",
     };
+    const anonData = {
+      text: "Feel free to add your own quote!",
+      author: "Anonymous",
+    };
+    const anonOriginalData = {
+      text: "Feel free to add your own quote!",
+      author: "",
+    };
 
     it('should return status 400 if "text" is empty.', (done) => {
       chai
@@ -234,15 +242,6 @@ describe("POST/PUT Tests", () => {
     });
 
     it('should fill in blank or missing authors with "Anonymous".', (done) => {
-      const anonData = {
-        text: "Feel free to add your own quote!",
-        author: "Anonymous",
-      };
-      const anonOriginalData = {
-        text: "Feel free to add your own quote!",
-        author: "",
-      };
-
       chai
         .request(app)
         .post("/api/quotes")
@@ -263,8 +262,18 @@ describe("POST/PUT Tests", () => {
     });
   });
 
-  xdescribe("PUT /api/quotes", () => {
+  describe("PUT /api/quotes", () => {
     let status;
+
+    const line4 = {
+      text:
+        "Trust because you are willing to accept the risk, not because it’s safe or certain.",
+      author: "Anonymous",
+    };
+    const newLine4 = {
+      text: "Wubba lubba dub dub!",
+      author: "Rick Sanchez",
+    };
 
     before((done) => {
       chai
@@ -283,7 +292,7 @@ describe("POST/PUT Tests", () => {
       done();
     });
 
-    it("should overwrite the existing quote file.", (done) => {
+    xit("should overwrite the existing quote file.", (done) => {
       chai
         .request(app)
         .get("/api/quotes")
@@ -294,7 +303,7 @@ describe("POST/PUT Tests", () => {
         });
     });
 
-    it('should return status 400 if "text" is empty.', (done) => {
+    xit('should return status 400 if "text" is empty.', (done) => {
       chai
         .request(app)
         .put("/api/quotes")
@@ -310,11 +319,13 @@ describe("POST/PUT Tests", () => {
         });
     });
 
-    it('should fill in blank or missing authors with "Anonymous".', (done) => {
-      // Your code here!
+    xit('should fill in blank or missing authors with "Anonymous".', (done) => {
+      done();
     });
 
-    it("should clear the file if passed an empty request body");
+    xit("should clear the file if passed an empty request body.", (done) => {
+      done();
+    });
   });
 });
 
