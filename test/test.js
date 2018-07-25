@@ -265,15 +265,17 @@ describe("POST/PUT Tests", () => {
   describe("PUT /api/quotes", () => {
     let status;
 
-    const line4 = {
-      text:
-        "Trust because you are willing to accept the risk, not because it’s safe or certain.",
+    const anon = {
+      text: "Wubba lubba dub dub!",
       author: "Anonymous",
     };
-    const newLine4 = {
-      text: "Wubba lubba dub dub!",
-      author: "Rick Sanchez",
-    };
+
+    const noName = [
+      {
+        text: "Wubba lubba dub dub!",
+        author: "",
+      },
+    ];
 
     before((done) => {
       chai
@@ -319,8 +321,21 @@ describe("POST/PUT Tests", () => {
         });
     });
 
-    xit('should fill in blank or missing authors with "Anonymous".', (done) => {
-      done();
+    it('should fill in blank or missing authors with "Anonymous".', (done) => {
+      chai
+        .request(app)
+        .put("/api/quotes")
+        .set("Content-Type", "application/json")
+        .send([
+          {
+            text: "Wubba lubba dub dub!",
+            author: "",
+          },
+        ])
+        .end((_, res) => {
+          JSON.parse(res.text).quotes.should.deep.equal(anon);
+          done();
+        });
     });
 
     xit("should clear the file if passed an empty request body.", (done) => {

@@ -56,7 +56,13 @@ const append = async (text, author) => {
 const update = async (object) => {
   const newQuotesArr = [];
   for (let i = 0; i < object.length; i++) {
-    newQuotesArr.push(`${object[i].text} ~${object[i].author}`);
+    let author;
+    if (!object[i].author) {
+      author = "Anonymous";
+    } else {
+      author = object[i].author;
+    }
+    newQuotesArr.push(`${object[i].text} ~${author}`);
   }
   const input = newQuotesArr.join("\n");
   await fs.writeFile("./server/data/quotes.txt", input, "utf8");
