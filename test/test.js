@@ -171,7 +171,7 @@ describe("POST/PUT Tests", () => {
     fs.unlinkSync(quotesBackup);
   });
 
-  xdescribe("POST /api/quotes", () => {
+  describe("POST /api/quotes", () => {
     before((done) => {
       chai
         .request(app)
@@ -213,7 +213,7 @@ describe("POST/PUT Tests", () => {
         });
     });
 
-    xit("should append new entries to the end of the file.", (done) => {
+    it("should append new entries to the end of the file.", (done) => {
       chai
         .request(app)
         .post("/api/quotes")
@@ -233,7 +233,7 @@ describe("POST/PUT Tests", () => {
         });
     });
 
-    xit('should fill in blank or missing authors with "Anonymous".', (done) => {
+    it('should fill in blank or missing authors with "Anonymous".', (done) => {
       // Your code here!
     });
   });

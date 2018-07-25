@@ -42,4 +42,8 @@ const send = (res, code, data, json = true) => {
   }
 };
 
+// const record = (quote, author) {
+
+// }
+
 module.exports = { read, send };

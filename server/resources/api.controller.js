@@ -23,4 +23,24 @@ module.exports = {
   quoteRandom(req, res) {
     send(res, OK, read("random"));
   },
+  addQuote(req, res) {
+    if (req.body.text === "") {
+      send(res, FAIL);
+      return;
+    }
+    if (req.body.text && req.body.author) {
+      const quotesObj = read();
+      const quotesArr = quotesObj.quotes;
+      const newQuotesArr = [];
+      for (let i = 0; i < quotesArr.length; i++) {
+        const quoteWithAuthor = `${quotesArr[i].text} ~${quotesArr[i].author}`;
+        newQuotesArr.push(quoteWithAuthor);
+      }
+      const newQuoteWithAuthor = `${req.body.text} ~${req.body.author}`;
+      newQuotesArr.push(newQuoteWithAuthor);
+      const output = newQuotesArr.join("\n");
+      fs.writeFileSync("./server/data/quotes.txt", output, "utf8");
+    }
+    send(res, OK);
+  },
 };
