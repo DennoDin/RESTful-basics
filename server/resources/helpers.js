@@ -6,7 +6,7 @@ const TYPE = "utf8";
 
 const cache = null;
 
-const read = () => {
+const read = (req) => {
   const text = fs.readFileSync(QUOTES, TYPE);
   const obj = {
     quotes: [],
@@ -19,6 +19,16 @@ const read = () => {
       author: splitLine[1],
     };
     obj.quotes.push(objects);
+  }
+  if (req === "random") {
+    const number = Math.floor(Math.random() * obj.quotes.length);
+    const randomQuote = obj.quotes[number];
+    return randomQuote;
+  }
+  if (req) {
+    return obj.quotes.filter((element) => {
+      return element.author === req;
+    });
   }
   return obj;
 };

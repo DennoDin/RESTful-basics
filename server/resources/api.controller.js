@@ -17,9 +17,10 @@ module.exports = {
     );
   },
   quote(req, res) {
-    send(res, OK, read());
+    const author = req.query.author;
+    send(res, OK, read(author));
   },
-  quoteAuthor(req, res) {
-    send(res, OK, read());
+  quoteRandom(req, res) {
+    send(res, OK, read("random"));
   },
 };
